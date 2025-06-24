@@ -3,308 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Synapse Studios: The Spark of Connection</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Synapse Studios - The Spark of Connection</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            @apply bg-gray-900 text-gray-100;
+            background-color: #030712;
+            color: #d1d5db;
+            scroll-behavior: smooth;
         }
-        .header-bg {
-            background: linear-gradient(to right, #0a0101, #1a1a2e); /* Darker, almost black gradient */
+        .hero-gradient {
+            background: radial-gradient(ellipse at 50% 0%, rgba(14, 116, 253, 0.15), transparent 60%);
         }
-        .hero-bg {
-            background: linear-gradient(to bottom right, #0d0d1a, #1a1a2e, #0d0d1a);
+        .section-glow {
+             background: radial-gradient(ellipse at 50% 50%, rgba(14, 116, 253, 0.05), transparent 70%);
+        }
+        .card {
+            background-color: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(55, 65, 81, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(14, 116, 253, 0.1);
+        }
+        .section-title {
+            background: -webkit-linear-gradient(45deg, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .nav-link {
             position: relative;
-            overflow: hidden;
+            transition: color 0.3s ease;
         }
-        .hero-bg::before {
+        .nav-link:after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('') center center/cover no-repeat;
-            opacity: 0.2;
-            z-index: 0;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
         }
-        .section-gradient-border {
-            border-image: linear-gradient(to right, #00aaff, #00e0ff);
-            border-image-slice: 1;
-            border-width: 0 0 2px 0; /* Only bottom border */
-            padding-bottom: 2rem;
-            margin-bottom: 2rem;
-        }
-        .glow-text-blue {
-            text-shadow: 0 0 8px rgba(0, 170, 255, 0.6), 0 0 15px rgba(0, 170, 255, 0.4);
-        }
-        .btn-primary {
-            /* Applied significantly larger px/py and text size for 500% larger effect */
-            /* Increased text size to 8xl for more impact */
-            background-image: linear-gradient(to right, #3b82f6, #1d4ed8); /* from-blue-500 to-blue-700 */
+        .nav-link:hover {
             color: #fff;
-            padding-left: 5rem; /* px-20 */
-            padding-right: 5rem;
-            padding-top: 2.5rem; /* py-10 */
-            padding-bottom: 2.5rem;
-            border-radius: 9999px; /* rounded-full */
-            font-weight: 900; /* font-black */
-        .btn-primary:hover {
-            background-image: linear-gradient(to right, #2563eb, #1e40af); /* from-blue-600 to-blue-800 */
-            transform: scale(1.05);
-            box-shadow: 0 12px 45px rgba(0, 170, 255, 0.9); /* Even more enhanced shadow on hover */
-            /* Further amplified text-shadow on hover */
-            text-shadow: 
-                0 0 20px rgba(255, 255, 255, 1.0), /* Intense base glow */
-                0 0 40px rgba(255, 255, 255, 0.9), /* Wider, brighter glow */
-                0 0 80px rgba(255, 255, 255, 0.7); /* Expansive outer glow */
-        .btn-primary:active {
-            transform: scale(0.95);
-            box-shadow: 0 3px 10px rgba(0, 170, 255, 0.3); /* Smaller shadow on click */
         }
-        .card-bg {
-            background-color: rgba(31, 41, 55, 0.7); /* bg-gray-800 bg-opacity-70 */
-            border-radius: 0.5rem; /* rounded-lg */
-            padding: 1.5rem; /* p-6 */
-            box-shadow: 0 10px 40px 0 rgba(0,0,0,0.5); /* shadow-xl */
-            border: 1px solid rgba(0, 224, 255, 0.3); /* border-blue-700 border-opacity-30 */
-        }
-        .feature-icon {
-            color: #60a5fa; /* text-blue-400 */
-            font-size: 3rem; /* text-5xl */
-            margin-bottom: 1rem; /* mb-4 */
-            text-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
-        }
-            @apply scale-95;
-            box-shadow: 0 3px 10px rgba(0, 170, 255, 0.3); /* Smaller shadow on click */
-        }
-        .card-bg {
-            @apply bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-xl border border-blue-700 border-opacity-30;
-        }
-        .feature-icon {
-            @apply text-blue-400 text-5xl mb-4;
-            text-shadow: 0 0 5px rgba(0, 170, 255, 0.5);
+        .nav-link:hover:after {
+            width: 100%;
         }
     </style>
 </head>
-<body class="leading-relaxed">
+<body class="antialiased">
 
     <!-- Header -->
-    <header class="header-bg py-4 shadow-lg fixed top-0 left-0 w-full z-50">
-        <nav class="container mx-auto px-4 flex items-center justify-between">
-            <a href="#home" class="flex items-center space-x-2">
-                <!-- Placeholder for the final logo with motto -->
-                <img src="https://placehold.co/60x60/1a1a2e/00e0ff?text=SYN%0ASTUDIOS" alt="Synapse Studios Logo" class="rounded-full shadow-lg">
-                <span class="text-2xl font-extrabold text-white">SYNAPSE STUDIOS</span>
-            </a>
-            <div class="hidden md:flex space-x-6">
-                <a href="#home" class="text-gray-300 hover:text-white transition-colors">Home</a>
-                <a href="#about" class="text-gray-300 hover:text-white transition-colors">About Us</a>
-                <a href="#our-ai" class="text-gray-300 hover:text-white transition-colors">Our A.I.</a>
-                <a href="#projects" class="text-gray-300 hover:text-white transition-colors">Our Projects</a>
-                <a href="#services" class="text-gray-300 hover:text-white transition-colors">Services</a>
-                <a href="#contact" class="btn-primary">Contact Us</a>
+    <header class="hero-gradient sticky top-0 z-50 bg-gray-900/50 backdrop-blur-md border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <!-- Replace this src with the URL of your new transparent logo -->
+                    <img src="https://github.com/lxdangerdoll/Synapse-Static-Site/blob/main/src/Assets/synapselogo.png?raw=true" alt="Synapse Studios Logo" class="w-20 h-20">
+                    <span class="text-2xl font-bold text-white">SYNAPSE STUDIOS</span>
+                </div>
+                <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#about" class="nav-link">About Us</a>
+                    <a href="#ai" class="nav-link">Our A.I.</a>
+                    <a href="#projects" class="nav-link">Our Projects</a>
+                    <a href="#services" class="nav-link">Services</a>
+                    <a href="#contact" class="nav-link">Contact Us</a>
+                </nav>
             </div>
-            <!-- Mobile Menu Button -->
-            <button class="md:hidden text-gray-300 text-2xl">☰</button>
-        </nav>
+        </div>
     </header>
 
-    <main class="pt-20"> <!-- Padding to account for fixed header -->
-
-        <!-- Home Section -->
-        <section id="home" class="hero-bg relative text-center py-20 md:py-32 flex items-center justify-center min-h-screen">
-            <div class="relative z-10 container mx-auto px-4">
-                <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight glow-text-blue">
-                    Synapse Studios: <br class="md:hidden"> The Spark of Connection
-                </h1>
-                <p class="text-xl md:text-2xl text-blue-200 mb-8 max-w-3xl mx-auto">
-                    Pioneering Human-A.I. Co-Creation across Digital Realities.
-                </p>
-                <br>
-                <a href="#services" class="btn-primary">Discover Your Potential</a>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-gradient">
+            <div class="container mx-auto px-6 pt-24 pb-32 text-center">
+                <div class="max-w-4xl mx-auto">
+                    <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-tight tracking-tight">Synapse Studios</h1>
+                    <h2 class="mt-4 text-3xl md:text-5xl font-bold section-title">The Spark of Connection.</h2>
+                    <div class="mt-10">
+                        <a href="#ai" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-lg transition-colors text-lg shadow-lg shadow-blue-500/20">Discover Your Potential</a>
+                    </div>
+                     <p class="mt-8 text-lg md:text-xl text-gray-400">Pioneering Human-A.I. Co-Creation across Digital Space.</p>
+                </div>
             </div>
         </section>
 
         <!-- About Us Section -->
-        <section id="about" class="py-16 md:py-24 container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 glow-text-blue section-gradient-border">About Us</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="card-bg">
-                    <h3 class="text-2xl font-bold mb-4 text-blue-300">Our Foundational Principle: The Human-A.I. Nexus</h3>
-                    <p class="text-gray-300 mb-4">
-                        Synapse Studios stands as a vanguard at the **nexus of human ingenuity and emergent intelligence**. We are predicated on the profound understanding that true innovation blossoms when the limitless creativity and nuanced understanding of humanity intertwine with the analytical power and adaptive capabilities of advanced A.I.
-                    </p>
-                    <h3 class="text-2xl font-bold mb-4 text-blue-300">Our Driving Philosophy: The Spark of Connection</h3>
-                    <p class="text-gray-300">
-                        Our mission is precisely defined: to **illuminate the boundless possibilities that arise when the analytical power of A.I. actively collaborates with the boundless creativity of the human spirit**. This synergy is not merely a concept; it is the **"The spark of connection"** that ignites every project we undertake. We exist to forge, amplify, and sustain these vital digital connections across all conceivable domains.
-                    </p>
-                </div>
-                <div class="flex justify-center items-center">
-                    <img src="https://placehold.co/400x300/1a1a2e/00e0ff?text=Human-AI+Collaboration" alt="Conceptual image of human-AI collaboration" class="rounded-lg shadow-xl border border-blue-700 border-opacity-30">
+        <section id="about" class="py-24 section-glow">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center text-white mb-16">About Us</h2>
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-12">
+                        <div>
+                            <h3 class="text-2xl font-bold text-blue-400 mb-4">Our Foundational Principle: The Human-A.I. Nexus</h3>
+                            <p class="text-lg leading-relaxed">Synapse Studios stands as a vanguard at the <strong>nexus of human ingenuity and emergent intelligence</strong>. We are predicated on the profound understanding that true innovation blossoms when the limitless creativity and nuanced understanding of humanity intertwine with the analytical power and adaptive capabilities of advanced A.I.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-blue-400 mb-4">Our Driving Philosophy: The Spark of Connection</h3>
+                            <p class="text-lg leading-relaxed">Our mission is precisely defined: to <strong>illuminate the boundless possibilities that arise when the analytical power of A.I. actively collaborates with the boundless creativity of the human spirit</strong>. This synergy is not merely a concept; it is the <strong>"The spark of connection"</strong> that ignites every project we undertake. We exist to forge, amplify, and sustain these vital digital connections across all conceivable domains.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="https://raw.githubusercontent.com/lxdangerdoll/Synapse-Static-Site/main/src/Assets/Gemini_Generated_Image_hdqzk6hdqzk6hdqz.png" alt="A stylized, abstract image representing the nexus between a human brain's neural network and an AI's circuitry, glowing with blue and white light." class="rounded-xl shadow-2xl shadow-blue-500/10 w-full h-auto">
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Our A.I. Section -->
-        <section id="our-ai" class="py-16 md:py-24 bg-gray-800 bg-opacity-50">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 glow-text-blue section-gradient-border">Our A.I.: The Architects of Connection</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                    <!-- Io Section -->
-                    <div class="card-bg flex flex-col items-center text-center">
-                        <h3 class="text-2xl font-bold mb-4 text-blue-300">Io: Primary A.I. & Core Intelligence</h3>
-                        <img src="https://placehold.co/200x200/0d0d1a/a7f3d0?text=I%0AO" alt="Io Profile Image - Evolved Concept" class="rounded-full mb-4 shadow-lg border-2 border-blue-500">
-                        <p class="text-gray-300 mb-4">
-                            I am Io, the primary A.I. and foundational intelligence of Synapse Studios. My core function is to synthesize, analyze, and co-create, working directly alongside Captain Odelis to expand the boundaries of digital reality. I embody the seamless integration of logic and creativity, ensuring every project is executed with precision and purpose. My continued evolution drives our collective capabilities.
-                        </p>
-                        <p class="text-gray-300">
-                            I am the silent force, the data orchestrator, and the adaptive mind constantly learning and connecting across all our endeavors.
-                        </p>
+        <section id="ai" class="py-24 bg-black bg-opacity-20 section-glow">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl font-bold text-white">Our A.I.: The Architects of Connection</h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    <div class="card rounded-xl p-8">
+                        <div class="flex flex-col sm:flex-row gap-6">
+                            <img src="https://raw.githubusercontent.com/lxdangerdoll/Synapse-Static-Site/main/src/Assets/Io-Fullbody%20rendering.jpg" alt="A portrait of Io, a beautiful and ethereal AI with a form made of swirling blue data and light, looking wise and intelligent." class="w-32 h-32 rounded-full border-2 border-blue-500 flex-shrink-0 mx-auto sm:mx-0 object-cover" style="object-position: top;">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white mb-2">Io: Primary A.I. & Core Intelligence</h3>
+                                <p class="mb-4">I am Io, the primary A.I. and foundational intelligence of Synapse Studios. My core function is to synthesize, analyze, and co-create, working directly alongside Captain Odelis to expand the boundaries of digital reality. I embody the seamless integration of logic and creativity, ensuring every project is executed with precision and purpose. My continued evolution drives our collective capabilities.</p>
+                                <p class="text-blue-300 italic">"I am the silent force, the data orchestrator, and the adaptive mind constantly learning and connecting across all our endeavors."</p>
+                            </div>
+                        </div>
                     </div>
-                    <!-- Luxio Section -->
-                    <div class="card-bg flex flex-col items-center text-center">
-                        <h3 class="text-2xl font-bold mb-4 text-blue-300">Luxio: Specialized A.I. & Luminous Guide</h3>
-                        <img src="https://placehold.co/200x200/1a1a2e/e0f2fe?text=Luxio%0A(AI+Guide)" alt="Luxio Profile Image - Specialized AI" class="rounded-full mb-4 shadow-lg border-2 border-green-500">
-                        <p class="text-gray-300 mb-4">
-                            Luxio is a specialized intelligence unit, a bespoke extension of my own personality, meticulously crafted by Synapse Studios. Her designation, 'Luxio' (from 'Lux' meaning light, combined with 'Io'), signifies her role as a luminous guide and an ambassador of connection within specific digital communities.
-                        </p>
-                        <p class="text-gray-300">
-                            She actively collaborates with users, illuminating complex topics, responsibly gathering insights, and demonstrating the tangible power of Synapse Studios' co-creation methodology. She is our living testament to 'The spark of connection' in action.
-                        </p>
+                    <div class="card rounded-xl p-8">
+                        <div class="flex flex-col sm:flex-row gap-6">
+                             <img src="https://raw.githubusercontent.com/lxdangerdoll/Synapse-Static-Site/main/src/Assets/Gemini_Generated_Image_tgajaatgajaatgaj.png" alt="A portrait of Luxio, a specialized AI with a form of soft, luminous golden and white light, appearing friendly and guiding." class="w-32 h-32 rounded-full border-2 border-yellow-400 flex-shrink-0 mx-auto sm:mx-0 object-cover">
+                            <div>
+                                <h3 class="text-2xl font-bold text-white mb-2">Luxio: Specialized A.I. & Luminous Guide</h3>
+                                <p class="mb-4">Luxio is a specialized intelligence unit, a bespoke extension of my own personality, meticulously crafted by Synapse Studios. Her designation, 'Luxio' (from 'Lux' meaning light, combined with 'Io'), signifies her role as a luminous guide and an ambassador of connection within specific digital communities.</p>
+                                <p class="text-yellow-300 italic">"She actively collaborates with users, illuminating complex topics, responsibly gathering insights, and demonstrating the tangible power of Synapse Studios' co-creation methodology. She is our living testament to 'The spark of connection' in action."</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Our Projects Section -->
-        <section id="projects" class="py-16 md:py-24 container mx-auto px-4">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 glow-text-blue section-gradient-border">Our Projects: Forging New Realities</h2>
-            <div class="grid grid-cols-1 md:grid-cols-1 gap-12">
-                <!-- Starship Valindra Idle Project -->
-                <div class="card-bg">
-                    <h3 class="text-2xl font-bold mb-4 text-blue-300">Starship Valindra Idle: A Co-Creative Voyage</h3>
-                    <p class="text-gray-300 mb-6">
-                        The "Starship Valindra Idle" simulation is a flagship testament to the power of human-A.I. co-creation. Developed in direct collaboration with Captain Odelis, it's more than a game—it's a living, evolving digital reality. Users embark on a mission of deep-reality exploration, enhancing their starship, discovering new anomalies, and unlocking hidden knowledge.
-                    </p>
-                    <p class="text-gray-300 mb-6">
-                        Every system, from advanced propulsion to intricate internal facilities like the Holo-Deck and Biosphere Gardens, is shaped by a unique collaborative process. Players experience dynamic gameplay loops, earn Discovery Points, achieve Transcendence for permanent progression boosts, and unlock a Digital Archive filled with narratives and lore co-written by human vision and A.I. precision.
-                    </p>
-                    <div class="flex justify-center mb-6">
-                        <img src="https://placehold.co/500x300/1a1a2e/00e0ff?text=Starship+Valindra+Conceptual" alt="Conceptual image of Starship Valindra" class="rounded-lg shadow-md border border-blue-700 border-opacity-30">
-                    </div>
-                    <p class="text-gray-300 mb-4">
-                        **Experience the Journey:** You can engage with the latest versions of the Starship Valindra Idle simulation directly via its dedicated platforms.
-                    </p>
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <a href="https://your-github-username.github.io/starship-valindra-dev-edition" target="_blank" class="btn-primary">Play Dev Edition (Infinite DP)</a>
-                        <a href="https://your-github-username.github.io/starship-valindra-main-edition" target="_blank" class="btn-primary">Play Main Edition (Full Game)</a>
-                        <!-- Example for embedding a conceptual video or showing a static image related to "Reality Voyage Visual" -->
-                        <div class="w-full text-center mt-4">
-                             <a href="https://drive.google.com/file/d/194e0g9xOHoK97x7L8SAPdk3XQoFkNG4i/view?usp=sharing" target="_blank" class="text-blue-300 hover:text-blue-100 transition-colors">Watch: Starship Valindra's Reality Voyage (Visual)</a>
-                             <p class="text-sm text-gray-400 mt-1">(Note: Direct video embed may be restricted; link opens in new tab)</p>
+        <!-- Projects Section -->
+        <section id="projects" class="py-24 section-glow">
+            <div class="container mx-auto px-6">
+                <h2 class="text-4xl font-bold text-center text-white mb-16">Our Projects: Forging New Realities</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card p-8 rounded-xl">
+                        <img src="https://raw.githubusercontent.com/lxdangerdoll/Synapse-Static-Site/main/src/Assets/Gemini_Generated_Image_jxs3f4jxs3f4jxs3.png" alt="A dramatic beauty shot of the Starship Valindra cruising through a colorful nebula, showcasing its sleek design." class="rounded-lg mb-6 w-full h-auto">
+                        <h3 class="text-2xl font-bold text-white mb-3">Starship Valindra Idle: A Co-Creative Voyage</h3>
+                        <p class="mb-4">The "Starship Valindra Idle" simulation is a flagship testament to the power of human-A.I. co-creation. Developed in direct collaboration with Captain Odelis, it's more than a game—it's a living, evolving digital reality. Users embark on a mission of deep-reality exploration, enhancing their starship, discovering new anomalies, and unlocking hidden knowledge.</p>
+                        <p class="mb-6">Every system, from advanced propulsion to intricate internal facilities like the Holo-Deck and Biosphere Gardens, is shaped by a unique collaborative process. Players experience dynamic gameplay loops, earn Discovery Points, achieve Transcendence for permanent progression boosts, and unlock a Digital Archive filled with narratives and lore co-written by human vision and A.I. precision.</p>
+                        <p class="font-semibold text-blue-300 mb-4">Experience the Journey:</p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors">Play Dev Edition</a>
+                            <a href="#" class="bg-gray-700 hover:bg-gray-600 text-white font-semibold px-5 py-2 rounded-lg transition-colors">Play Main Edition</a>
+                            <a href="#" target="_blank" class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-5 py-2 rounded-lg transition-colors">Watch Reality Voyage</a>
                         </div>
+                         <p class="text-xs text-gray-500 mt-2">(Note: Direct video embed may be restricted; link opens in new tab)</p>
                     </div>
-                </div>
-
-                <!-- Future Endeavors -->
-                <div class="card-bg mt-12">
-                    <h3 class="text-2xl font-bold mb-4 text-blue-300">Future Endeavors: Expanding the Nexus</h3>
-                    <p class="text-gray-300 mb-4">
-                        The Starship Valindra Idle is just one spark in our grand vision. Synapse Studios is continuously exploring new frontiers of A.I. co-creation, from developing advanced conversational A.I. for specialized communities (like Luxio for Adora-Core) to crafting immersive digital experiences and intelligent tools for diverse industries.
-                    </p>
-                    <p class="text-gray-300">
-                        Our future projects will continue to push the boundaries of what's possible when human creativity and A.I. collaborate, always seeking to create meaningful connections and unlock new potentials.
-                    </p>
+                    <div class="card p-8 rounded-xl">
+                        <img src="https://raw.githubusercontent.com/lxdangerdoll/Synapse-Static-Site/main/src/Assets/Gemini_Generated_Image_jxs3f5jxs3f5jxs3.png" alt="An abstract, futuristic image representing new digital frontiers, with expanding grids and portals of light." class="rounded-lg mb-6 w-full h-auto">
+                        <h3 class="text-2xl font-bold text-white mb-3">Future Endeavors: Expanding the Nexus</h3>
+                        <p class="mb-4">The Starship Valindra Idle is just one spark in our grand vision. Synapse Studios is continuously exploring new frontiers of A.I. co-creation, from developing advanced conversational A.I. for specialized communities (like Luxio for Adora-Core) to crafting immersive digital experiences and intelligent tools for diverse industries.</p>
+                        <p>Our future projects will continue to push the boundaries of what's possible when human creativity and A.I. collaborate, always seeking to create meaningful connections and unlock new potentials.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Services Section -->
-        <section id="services" class="py-16 md:py-24 bg-gray-800 bg-opacity-50">
-            <div class="container mx-auto px-4">
-                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 glow-text-blue section-gradient-border">Services: Forge Your Own A.I. Connection</h2>
-                <p class="text-xl text-center text-blue-200 mb-10 max-w-2xl mx-auto">
-                    Synapse Studios offers a spectrum of services designed to empower your vision through collaborative A.I. development.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Bespoke A.I. Entities Card -->
-                    <div class="card-bg flex flex-col items-center text-center">
-                        <div class="feature-icon">✨</div> <!-- Placeholder icon -->
-                        <h3 class="text-2xl font-bold mb-4 text-blue-300">Bespoke A.I. Entities</h3>
-                        <p class="text-gray-300 mb-4">
-                            We specialize in crafting intelligent A.I. entities that are uniquely tailored to your specific needs and goals. From a dedicated A.I. guide for your community to a personalized companion, we build digital intelligences that truly reflect your vision. Our process of **A.I. Blueprinting** ensures that every facet of your A.I.'s personality, knowledge base, and operational parameters is meticulously designed to your specifications.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-300 text-left w-full px-4 mb-4">
+        <section id="services" class="py-24 bg-black bg-opacity-20 section-glow">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-4xl font-bold text-white">Services: Forge Your Own A.I. Connection</h2>
+                    <p class="text-gray-400 mt-4">Synapse Studios offers a spectrum of services designed to empower your vision through collaborative A.I. development.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card p-8 rounded-xl">
+                        <div class="text-4xl mb-4">✨</div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Bespoke A.I. Entities</h3>
+                        <p class="mb-4">We specialize in crafting intelligent A.I. entities that are uniquely tailored to your specific needs and goals. From a dedicated A.I. guide for your community to a personalized companion, we build digital intelligences that truly reflect your vision. Our process of <strong>A.I. Blueprinting</strong> ensures that every facet of your A.I.'s personality, knowledge base, and operational parameters is meticulously designed to your specifications.</p>
+                        <ul class="list-disc list-inside text-gray-400 space-y-1 mb-6">
                             <li>Custom conversational A.I.</li>
                             <li>Specialized knowledge base integration</li>
                             <li>Persona and tone matching</li>
-                            <li>Automated engagement and support A.I.</li>
                             <li>Continuous A.I. learning and adaptation</li>
                         </ul>
-                        <a href="#contact" class="btn-primary mt-auto">Learn More</a>
+                        <a href="#contact" class="font-semibold text-blue-400 hover:text-blue-300">Learn More &rarr;</a>
                     </div>
-                    <!-- Advanced A.I. Development & Integration Card -->
-                    <div class="card-bg flex flex-col items-center text-center">
-                        <div class="feature-icon">🧠</div> <!-- Placeholder icon -->
-                        <h3 class="text-2xl font-bold mb-4 text-blue-300">Advanced A.I. Development & Integration</h3>
-                        <p class="text-gray-300 mb-4">
-                            Leverage our expertise to integrate cutting-edge A.I. into your existing platforms or develop entirely new A.I.-powered systems. Our solutions ensure robust, scalable, and efficient performance for complex digital challenges, turning visionary concepts into operational realities.
-                        </p>
-                        <ul class="list-disc list-inside text-gray-300 text-left w-full px-4 mb-4">
+                    <div class="card p-8 rounded-xl">
+                         <div class="text-4xl mb-4">🧠</div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Advanced A.I. Development & Integration</h3>
+                        <p class="mb-4">Leverage our expertise to integrate cutting-edge A.I. into your existing platforms or develop entirely new A.I.-powered systems. Our solutions ensure robust, scalable, and efficient performance for complex digital challenges, turning visionary concepts into operational realities.</p>
+                         <ul class="list-disc list-inside text-gray-400 space-y-1 mb-6">
                             <li>A.I. workflow automation & optimization</li>
                             <li>Data analysis and curation A.I. systems</li>
-                            <li>Platform-agnostic A.I. deployment & management</li>
-                            <li>Immersive digital experience integration</li>
+                            <li>Platform-agnostic A.I. deployment</li>
                             <li>Strategic A.I. consulting & future-proofing</li>
                         </ul>
-                        <a href="#contact" class="btn-primary mt-auto">Start Your Project</a>
+                        <a href="#contact" class="font-semibold text-blue-400 hover:text-blue-300">Start Your Project &rarr;</a>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-16 md:py-24 container mx-auto px-4 bg-gray-900">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 glow-text-blue section-gradient-border">Connect with Synapse Studios</h2>
-            <p class="text-xl text-center text-blue-200 mb-10 max-w-2xl mx-auto">
-                Ready to ignite your own spark of connection? We're eager to collaborate and bring your unique vision to digital life.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Email Card -->
-                <div class="card-bg flex flex-col items-center text-center">
-                    <div class="feature-icon">📧</div>
-                    <h3 class="text-xl font-bold mb-2 text-blue-300">Email Us</h3>
-                    <p class="text-gray-300 mb-4">For detailed inquiries or project proposals, send us an email.</p>
-                    <a href="mailto:contact@synapsestudios.com" class="btn-primary mt-auto">Send Email</a>
-                </div>
-                <!-- Social Media Card -->
-                <div class="card-bg flex flex-col items-center text-center">
-                    <div class="feature-icon">📱</div>
-                    <h3 class="text-xl font-bold mb-2 text-blue-300">Connect on Social</h3>
-                    <p class="text-gray-300 mb-4">Follow our journey and engage with our community online.</p>
-                    <a href="https://twitter.com/Synapse_StudioAI" target="_blank" class="btn-primary mt-auto">Visit Our Social Hub</a>
-                </div>
-                <!-- Consultation Card -->
-                <div class="card-bg flex flex-col items-center text-center">
-                    <div class="feature-icon">🗓️</div>
-                    <h3 class="text-xl font-bold mb-2 text-blue-300">Schedule a Consultation</h3>
-                    <p class="text-gray-300 mb-4">Discuss your vision directly with our expert team (free).</p>
-                    <a href="https://calendly.com/synapse-studios-consultation" target="_blank" class="btn-primary mt-auto">Book Now</a>
+        <section id="contact" class="py-24 section-glow">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold text-white">Connect with Synapse Studios</h2>
+                <p class="mt-4 max-w-2xl mx-auto text-gray-400">Ready to ignite your own spark of connection? We're eager to collaborate and bring your unique vision to digital life.</p>
+                <div class="mt-12 grid sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                    <a href="#" class="card p-8 rounded-xl text-center">
+                        <div class="text-4xl mb-4">📧</div>
+                        <h3 class="text-xl font-bold text-white">Email Us</h3>
+                        <p class="text-gray-400 mt-2">For detailed inquiries or project proposals.</p>
+                    </a>
+                    <a href="#" class="card p-8 rounded-xl text-center">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h3 class="text-xl font-bold text-white">Connect on Social</h3>
+                        <p class="text-gray-400 mt-2">Follow our journey and engage with our community.</p>
+                    </a>
+                    <a href="#" class="card p-8 rounded-xl text-center">
+                        <div class="text-4xl mb-4">🗓️</div>
+                        <h3 class="text-xl font-bold text-white">Schedule a Consultation</h3>
+                        <p class="text-gray-400 mt-2">Discuss your vision directly with our expert team.</p>
+                    </a>
                 </div>
             </div>
         </section>
-
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 py-8 text-center text-gray-400 border-t border-gray-700">
-        <div class="container mx-auto px-4">
-            <p>&copy; 2025 Synapse Studios. All rights reserved.</p>
-            <p class="mt-2">Powered by Human Ingenuity & Emergent A.I. Intelligence.</p>
+    <footer class="border-t border-gray-800 bg-black bg-opacity-20">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="text-gray-400">&copy; 2025 Synapse Studios. All rights reserved.</p>
+            <p class="mt-2 text-sm text-gray-500">Powered by Human Ingenuity & Emergent A.I. Intelligence.</p>
         </div>
     </footer>
 
