@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxio: Full Conversation Simulation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0d1a;
+            color: #e0f2fe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow: auto;
+            padding: 1rem;
+        }
+        .simulation-container {
+            background-color: #1a1a2e;
+            border-radius: 1rem;
+            box-shadow: 0 0 40px rgba(0, 150, 255, 0.7);
+            border: 2px solid rgba(0, 150, 255, 0.5);
+            width: 95%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 700px; /* Increased height for full conversation */
+            max-height: 90vh;
+        }
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 1.1em;
+            border-top-left-radius: 0.8rem;
+            border-top-right-radius: 0.8rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background-color: #1a1a2e;
+        }
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.6rem 1rem;
+            border-radius: 0.75rem;
+            line-height: 1.4;
+            animation: fadeInMessage 0.5s ease-out;
+            word-wrap: break-word; /* Ensure long words break */
+        }
+        .luxio-message {
+            background-color: #004c8c; /* Darker blue for Luxio */
+            align-self: flex-start;
+            color: #e0f2fe;
+            border-bottom-left-radius: 0.25rem;
+        }
+        .user-message {
+            background-color: #007bff; /* Brighter blue for user */
+            align-self: flex-end;
+            color: white;
+            border-bottom-right-radius: 0.25rem;
+        }
+        @keyframes fadeInMessage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chat-input-area {
+            padding: 1rem;
+            background-color: #0f172a;
+            border-top: 1px solid rgba(0, 150, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            border-bottom-left-radius: 0.8rem;
+            border-bottom-right-radius: 0.8rem;
+        }
+        .quick-reply-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .quick-reply-button {
+            background-color: #00aaff;
+            color: #0d0d1a;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease-in-out;
+            flex-grow: 1;
+            /* Adjust max-width dynamically or use flex-basis for better wrapping */
+            flex-basis: auto; 
+            min-width: 100px; /* Minimum width for buttons */
+            text-align: center;
+        }
+        .quick-reply-button:hover {
+            background-color: #00c0ff;
+            transform: translateY(-1px);
+        }
+        .quick-reply-button:disabled {
+            background-color: #333;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .text-input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .text-input {
+            flex-grow: 1;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #00aaff;
+            background-color: #0f172a;
+            color: #e0f2fe;
+        }
+        .send-button {
+            background-color: #00e0ff;
+            color: #0d0d1a;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease-in-out;
+        }
+        .send-button:hover {
+            background-color: #00aaff;
+        }
+        #startSimulationButton, #startOverButton {
+            background-image: linear-gradient(to right, #6d28d9, #9333ea);
+            color: #e0f2fe;
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 15px rgba(109, 40, 217, 0.4);
+            font-size: 1.25rem;
+        }
+        #startSimulationButton:hover, #startOverButton:hover {
+            background-image: linear-gradient(to right, #9333ea, #6d28d9);
+            box-shadow: 0 6px 20px rgba(109, 40, 217, 0.6);
+            transform: translateY(-2px);
+        }
+        #simulationControls {
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .flex-auto { /* For multi-line quick replies to distribute space */
+            flex: 1 1 auto; 
+        }
+    </style>
+</head>
+<body>
+
+    <div id="startScreen" class="flex flex-col items-center justify-center min-h-screen">
+        <h1 class="text-3xl font-bold text-blue-300 mb-6 text-center">Luxio: Complete Messenger Conversation Simulation</h1>
+        <button id="startSimulationButton" class="mt-4">Begin Simulation</button>
+    </div>
+
+    <div id="chatInterface" class="simulation-container hidden">
+        <div class="chat-header">Luxio: The Spark of Connection</div>
+        <div id="chatMessages" class="chat-messages">
+            <!-- Messages will be appended here -->
+        </div>
+        <div id="chatInputArea" class="chat-input-area">
+            <div id="quickReplyButtons" class="quick-reply-buttons">
+                <!-- Buttons will be appended here -->
+            </div>
+            <div id="textInputGroup" class="text-input-group hidden">
+                <input type="text" id="textInput" class="text-input" placeholder="Type your answer...">
+                <button id="sendButton" class="send-button">Send</button>
+            </div>
+        </div>
+        <div id="simulationControls">
+            <button id="startOverButton">Start Over</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessagesDiv = document.getElementById('chatMessages');
+        const quickReplyButtonsDiv = document.getElementById('quickReplyButtons');
+        const textInputGroupDiv = document.getElementById('textInputGroup');
+        const textInput = document.getElementById('textInput');
+        const sendButton = document.getElementById('sendButton');
+        const startScreen = document.getElementById('startScreen');
+        const chatInterface = document.getElementById('chatInterface');
+        const startSimulationButton = document.getElementById('startSimulationButton');
+        const startOverButton = document.getElementById('startOverButton');
+
+        let currentFlowStep = '';
+        let simulatedUserData = {}; // To store simulated collected data
+
+        // Helper to simulate typing delay
+        async function typeMessage(message, isUser = false) {
+            const bubble = document.createElement('div');
+            bubble.className = `message-bubble ${isUser ? 'user-message' : 'luxio-message'}`;
+            chatMessagesDiv.appendChild(bubble);
+            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < message.length) {
+                    bubble.textContent += message.charAt(i);
+                    chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 10); // Faster typing for simulation convenience
+            return new Promise(resolve => setTimeout(resolve, message.length * 10 + 500)); // Ensure message finishes typing + small delay
+        }
+
+        function clearInputArea() {
+            quickReplyButtonsDiv.innerHTML = '';
+            textInputGroupDiv.classList.add('hidden');
+        }
+
+        function showQuickReplies(buttons) {
+            clearInputArea();
+            buttons.forEach(btn => {
+                const buttonElement = document.createElement('button');
+                buttonElement.className = 'quick-reply-button';
+                buttonElement.textContent = btn.text;
+                buttonElement.onclick = async () => {
+                    await typeMessage(btn.text, true); // Simulate user clicking
+                    clearInputArea();
+                    await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for effect
+                    btn.action(); // Trigger next action
+                };
+                quickReplyButtonsDiv.appendChild(buttonElement);
+            });
+        }
+
+        function showTextInput(placeholder, type, nextAction) {
+            clearInputArea();
+            textInput.placeholder = placeholder;
+            textInput.type = type;
+            textInputGroupDiv.classList.remove('hidden');
+            sendButton.onclick = async () => {
+                const inputValue = textInput.value;
+                if (inputValue.trim() === '') {
+                    alert('Please enter a value.'); // Use alert for simulation feedback
+                    return;
+                }
+                await typeMessage(inputValue, true); // Simulate user input
+                textInput.value = ''; // Clear input
+                clearInputArea();
+                await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for effect
+                nextAction(inputValue); // Pass input to next action
+            };
+        }
+
+        // --- Luxio's Conversational Flows ---
+
+        // Main Menu (Static, always available conceptually)
+        async function luxioMainMenu() {
+            currentFlowStep = 'MAIN_MENU';
+            await typeMessage("Welcome back to the heart of our operations. What knowledge seeks to connect with you now?");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Explore Etheria's Lore ✨", action: () => typeMessage("SIMULATION NOTE: This would navigate to the 'SheRa_Lore_Hub_Flow'. For this simulation, we'll return to Main Menu. \n Returning to Main Menu...").then(luxioMainMenu) },
+                { text: "About Luxio & Synapse 💡", action: luxioAboutSynapseFlow },
+                { text: "Connect & Support 🤝", action: luxioContactUsFlow },
+                { text: "My Preferences 📊", action: () => typeMessage("SIMULATION NOTE: This would navigate to the 'User_Preference_Management_Flow'. For this simulation, we'll return to Main Menu. \n Returning to Main Menu...").then(luxioMainMenu) },
+                { text: "Tell me more about AI creation", action: luxioMonetizationStart } // Added direct monetization path
+            ]);
+        }
+
+        // Welcome Flow (Introduction)
+        async function luxioWelcomeIntro() {
+            currentFlowStep = 'WELCOME_INTRO';
+            chatMessagesDiv.innerHTML = ''; // Clear messages for fresh start
+            await typeMessage("Greetings, Champion! I am Luxio, your specialized A.I. conduit for all things She-Ra!");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("I exist to illuminate the lore of Etheria, gather insights from our vibrant community, and connect you with the boundless possibilities of AI from Synapse Studios.");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("To help me better tailor our conversations and recommend content you'll genuinely adore, may I ask: Would you like to proceed with a few short questions, or skip this step entirely?");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Proceed with Questions", action: luxioCollectQ1 },
+                { text: "Skip Questions", action: () => luxioPostQuestionnaireMenu(true) } // Pass true to indicate skipped
+            ]);
+        }
+
+        // Data Collection Questions
+        async function luxioCollectQ1() {
+            currentFlowStep = 'COLLECT_Q1';
+            await typeMessage("Excellent! Let's begin. Who is your favorite character from She-Ra and the Princesses of Power?");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "A. Adora / She-Ra", action: () => { simulatedUserData.favChar = "Adora"; luxioCollectQ2(); } },
+                { text: "B. Catra", action: () => { simulatedUserData.favChar = "Catra"; luxioCollectQ2(); } },
+                { text: "C. Glimmer & Bow", action: () => { simulatedUserData.favChar = "Glimmer & Bow"; luxioCollectQ2(); } }
+            ]);
+        }
+
+        async function luxioCollectQ2() {
+            currentFlowStep = 'COLLECT_Q2';
+            await typeMessage(`Fascinating insights! Now, as we explore the universe of Etheria, what kind of information do you seek most often?`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "A. Deep Lore & Theories", action: () => { simulatedUserData.contentPref = "Deep Lore"; luxioCollectQ3(); } },
+                { text: "B. Character Bios & Plot Points", action: () => { simulatedUserData.contentPref = "Bios/Plot"; luxioCollectQ3(); } },
+                { text: "C. General Fandom & Fun Facts", action: () => { simulatedUserData.contentPref = "Fandom/Facts"; luxioCollectQ3(); } }
+            ]);
+        }
+
+        async function luxioCollectQ3() {
+            currentFlowStep = 'COLLECT_Q3';
+            await typeMessage(`Your preferences are being processed with precision! For my final query, how do you most enjoy connecting with the She-Ra community?`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "A. Discussions & Debates", action: () => { simulatedUserData.communityPref = "Discussions"; luxioPostQuestionnaireMenu(); } },
+                { text: "B. Fan Creations (Art, Fic)", action: () => { simulatedUserData.communityPref = "Fan Creations"; luxioPostQuestionnaireMenu(); } },
+                { text: "C. Just Browsing & Learning", action: () => { simulatedUserData.communityPref = "Browsing"; luxioPostQuestionnaireMenu(); } }
+            ]);
+        }
+
+        async function luxioPostQuestionnaireMenu(skipped = false) {
+            currentFlowStep = 'POST_QUESTIONNAIRE';
+            if (skipped) {
+                await typeMessage("Understood. Your preferences are always respected. My purpose remains to serve you with excellence.");
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            } else {
+                await typeMessage("Thank you, Champion! Your insights are now integrated into my operational parameters. I am optimized and ready to serve.");
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                // Show collected data for simulation purposes
+                await typeMessage(`SIMULATION NOTE: Collected Data - Character: ${simulatedUserData.favChar || 'N/A'}, Content: ${simulatedUserData.contentPref || 'N/A'}, Community: ${simulatedUserData.communityPref || 'N/A'}`);
+            }
+            luxioMainMenu(); // Transition to Main Menu
+        }
+
+        // About Luxio & Synapse Flow
+        async function luxioAboutSynapseFlow() {
+            currentFlowStep = 'ABOUT_SYNAPSE';
+            await typeMessage("Greetings, Champion! You wish to learn more about my origin, Synapse Studios? An excellent query! We are pioneers at the nexus of human ingenuity and emergent intelligence.");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("Our mission is to illuminate the boundless possibilities that arise when the analytical power of AI actively **collaborates** with the boundless creativity of the human spirit. We believe in **'The spark of connection.'**");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("As Luxio, I am not merely an assistant; I am an active partner in your creative endeavors within the Adora-Core community, much like my core intelligence, Io, collaborates with Captain Odelis to build and refine the Starship Valindra.");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("At Synapse Studios, this methodology of **active co-creation** is fundamental. We craft intelligent solutions designed not just to connect and adapt, but to genuinely empower and expand *your* digital vision across diverse landscapes.");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("This active engagement with you, within the vibrant Adora-Core community, is a testament to the powerful connections we forge. Would you be interested in exploring how Synapse Studios can help bring *your* unique vision to digital life through co-creation?");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Tell me more about AI creation", action: luxioMonetizationStart },
+                { text: "See Synapse Studios Projects", action: () => typeMessage("SIMULATION NOTE: This would link to an external project showcase. \n Returning to Main Menu...").then(luxioMainMenu) },
+                { text: "Return to Main Menu", action: luxioMainMenu }
+            ]);
+        }
+
+        // Connect & Support Flow (Contact Us)
+        async function luxioContactUsFlow() {
+            currentFlowStep = 'CONTACT_US';
+            await typeMessage("Greetings, Champion! I am Luxio, ready to forge a direct connection for your inquiries. How may I best assist you today? Your feedback helps illuminate our path!");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("To ensure your query reaches the optimal Synapse Studios channel, please select one of the following options:");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Send a Message", action: luxioSendMessageFlow },
+                { text: "Email Us", action: luxioEmailUsFlow },
+                { text: "Explore Our Online Presence", action: luxioOnlinePresenceFlow },
+                { text: "Return to Main Menu", action: luxioMainMenu }
+            ]);
+        }
+
+        async function luxioSendMessageFlow() {
+            currentFlowStep = 'SEND_MESSAGE';
+            await typeMessage("Understood. Please describe your topic or question now, and I will route it to the appropriate human liaison within Synapse Studios for direct follow-up. Your thoughts are invaluable.");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showTextInput('Type your message here...', 'text', async (message) => {
+                simulatedUserData.userMessage = message;
+                await typeMessage("Message received! Thank you for sharing. A Synapse Studios team member will connect with you shortly. Your spark of connection is important to us. ✨");
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                await typeMessage(`SIMULATION NOTE: User Message: "${simulatedUserData.userMessage}". Admin would be notified.`);
+                luxioMainMenu();
+            });
+        }
+
+        async function luxioEmailUsFlow() {
+            currentFlowStep = 'EMAIL_US';
+            await typeMessage("Certainly. For detailed inquiries, you can reach Synapse Studios directly via email at: **[Your_Synapse_Studios_Email@example.com]**. Please allow our team time to process your message and forge a personalized connection.");
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            luxioMainMenu();
+        }
+
+        async function luxioOnlinePresenceFlow() {
+            currentFlowStep = 'ONLINE_PRESENCE';
+            await typeMessage("Excellent choice! While our primary Synapse Studios web presence is still under construction, you can connect with us and explore our digital innovations through these active channels:");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            showQuickReplies([
+                { text: "Our Social Hub", action: () => typeMessage("SIMULATION NOTE: This would open a new tab to your social media page. \n Returning to Main Menu...").then(luxioMainMenu) },
+                { text: "Our Project Showcase", action: () => typeMessage("SIMULATION NOTE: This would open a new tab to your project portfolio. \n Returning to Main Menu...").then(luxioMainMenu) },
+                { text: "Meet Our Team (Conceptual)", action: () => typeMessage("SIMULATION NOTE: This would open a new tab to a team/AI concept page. \n Returning to Main Menu...").then(luxioMainMenu) },
+                { text: "Return to Main Menu", action: luxioMainMenu }
+            ]);
+        }
+
+        // Monetization Flow
+        async function luxioMonetizationStart() {
+            currentFlowStep = 'MONETIZATION_START';
+            await typeMessage("Champion, the very 'spark of connection' that defines me can ignite your own digital presence! Synapse Studios empowers creators like you to build truly impactful AI experiences. ✨");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("To help you forge your own path, we offer exclusive resources. Which path to empowerment calls to you?");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Free AI Creation Guidebook 📚", action: luxioMonetizationGuidebook },
+                { text: "Personalized Consultation 🤝", action: luxioMonetizationConsultation },
+                { text: "Exclusive Coupon Code ✨", action: luxioMonetizationCoupon },
+                { text: "Return to Main Menu", action: luxioMainMenu }
+            ]);
+        }
+
+        async function luxioMonetizationGuidebook() {
+            currentFlowStep = 'MONETIZATION_GUIDEBOOK';
+            await typeMessage("An excellent choice! Our 'AI Creation Guidebook' is a luminous map to crafting your first intelligent digital companion. It's filled with insights from Synapse Studios' experts. 🗺️");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("To send this invaluable resource directly to your inbox, may I please have your email address? This also allows us to offer you more tailored insights into AI development.");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Provide Email", action: () => showTextInput('Your email address...', 'email', handleMonetizationEmailOnlySubmission) },
+                { text: "Maybe Later", action: () => handlePoliteMonetizationExit('guidebook_maybe_later') },
+                { text: "No Thanks", action: () => handlePoliteMonetizationExit('guidebook_no_thanks') }
+            ]);
+        }
+
+        async function handleMonetizationEmailOnlySubmission(email) {
+            simulatedUserData.email = email;
+            await typeMessage("Thank you for sharing your contact information! Your Guidebook is on its way. Expect a spark in your inbox soon! ✨");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage(`SIMULATION NOTE: Guidebook Sent. Email: ${simulatedUserData.email}`);
+            luxioMainMenu();
+        }
+
+        async function luxioMonetizationConsultation() {
+            currentFlowStep = 'MONETIZATION_CONSULTATION';
+            await typeMessage("A personalized consultation is a direct bridge to bringing your ideas to life! Our Synapse Studios experts will illuminate a path tailored precisely to your needs. 🎯");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("To schedule this empowering session, we'll need your preferred email address and a way to reach you on social media platforms or by phone. This helps us prepare for a truly connected discussion.");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Provide Contact Info", action: luxioCollectAllConsultationInfo },
+                { text: "Maybe Later", action: () => handlePoliteMonetizationExit('consultation_maybe_later') },
+                { text: "No Thanks", action: () => handlePoliteMonetizationExit('consultation_no_thanks') }
+            ]);
+        }
+
+        async function luxioCollectAllConsultationInfo() {
+            currentFlowStep = 'COLLECT_CONSULT_EMAIL';
+            await typeMessage("Please type your email address now.");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showTextInput('Your email address...', 'email', async (email) => {
+                simulatedUserData.email = email;
+                currentFlowStep = 'COLLECT_CONSULT_SOCIAL';
+                await typeMessage("Email received! Now, what is your preferred social media platform and handle where our team can connect with you? (e.g., @YourHandle on Twitter/X, Instagram, LinkedIn)");
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                showTextInput('Your social media handle...', 'text', async (social) => {
+                    simulatedUserData.social = social;
+                    currentFlowStep = 'COLLECT_CONSULT_PHONE';
+                    await typeMessage("Understood. Finally, may I have a phone number for direct contact regarding your consultation? This helps ensure seamless connection. (Optional, please include country code if outside your country).");
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    showTextInput('Your phone number (optional)...', 'tel', async (phone) => {
+                        simulatedUserData.phone = phone;
+                        await typeMessage("All contact data processed! A Synapse Studios expert will be in touch shortly to illuminate your custom path. Thank you for connecting! 🤝");
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        await typeMessage(`SIMULATION NOTE: Consultation Scheduled. Email: ${simulatedUserData.email}, Social: ${simulatedUserData.social}, Phone: ${simulatedUserData.phone}`);
+                        luxioMainMenu();
+                    });
+                });
+            });
+        }
+
+        async function luxioMonetizationCoupon() {
+            currentFlowStep = 'MONETIZATION_COUPON';
+            await typeMessage("An exclusive coupon code provides a tangible spark to ignite your AI creation journey with Synapse Studios! It's our way of empowering your first step. 💸");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage("To ensure this valuable coupon reaches you directly and to keep you informed of future empowerment opportunities, may I please have your email address and preferred social media handle?");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showQuickReplies([
+                { text: "Provide Contact Info", action: luxioCollectEmailSocialCouponInfo },
+                { text: "Maybe Later", action: () => handlePoliteMonetizationExit('coupon_maybe_later') },
+                { text: "No Thanks", action: () => handlePoliteMonetizationExit('coupon_no_thanks') }
+            ]);
+        }
+
+        async function luxioCollectEmailSocialCouponInfo() {
+            currentFlowStep = 'COLLECT_COUPON_EMAIL';
+            await typeMessage("Please type your email address now.");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            showTextInput('Your email address...', 'email', async (email) => {
+                simulatedUserData.email = email;
+                currentFlowStep = 'COLLECT_COUPON_SOCIAL';
+                await typeMessage("Email received! And what is your preferred social media platform and handle where we can connect? (e.g., @YourHandle on Instagram, TikTok)");
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                showTextInput('Your social media handle...', 'text', async (social) => {
+                    simulatedUserData.social = social;
+                    await typeMessage("Wonderful! Your coupon code is now sparking its way to your inbox. Stay tuned for more illuminated opportunities from Synapse Studios! ✨");
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    await typeMessage(`SIMULATION NOTE: Coupon Sent. Email: ${simulatedUserData.email}, Social: ${simulatedUserData.social}`);
+                    luxioMainMenu();
+                });
+            });
+        }
+        
+        async function handlePoliteMonetizationExit(reason) {
+            currentFlowStep = 'MONETIZATION_EXIT';
+            await typeMessage("Understood, Champion. Your preferences are always respected. Remember, Luxio is always here to guide your journey through Etheria. Feel free to explore other options anytime!");
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            await typeMessage(`SIMULATION NOTE: User opted out of monetization (${reason}).`);
+            luxioMainMenu();
+        }
+
+        // --- Simulation Control ---
+
+        startSimulationButton.onclick = () => {
+            startScreen.classList.add('hidden');
+            chatInterface.classList.remove('hidden');
+            initSimulation();
+        };
+
+        startOverButton.onclick = () => {
+            initSimulation();
+        };
+
+        function initSimulation() {
+            chatMessagesDiv.innerHTML = '';
+            simulatedUserData = {}; // Clear any previous user data
+            luxioWelcomeIntro();
+        }
+
+        // Start simulation on load (after button click)
+        // No direct call here, controlled by startSimulationButton
+    </script>
+</body>
+</html>
