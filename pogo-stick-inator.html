@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: Pogo-Stick-inator 9000</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            text-align: center;
+            padding: 2em;
+        }
+        header {
+            border-bottom: 1px solid #444;
+            padding-bottom: 1em;
+            margin-bottom: 2em;
+        }
+        header h1 {
+            color: #00f0a0;
+            margin: 0;
+        }
+        header p {
+            margin: 0;
+            color: #aaa;
+        }
+        #app {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 2em;
+            max-width: 600px;
+            margin: auto;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            color: #f0f0f0;
+            font-family: inherit;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #00f0a0;
+            border: none;
+            color: #1a1a1a;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1a1a1a;
+            border-left: 3px solid #00f0a0;
+            min-height: 50px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Synapse Studios</h1>
+        <p>A Bot Factory Guided by the Spark of Connection Philosophy</p>
+    </header>
+
+    <main id="app">
+        <h2>Project: Pogo-Stick-inator 9000</h2>
+        <p>Calculating absurd journeys since... well, now.</p>
+        <input type="text" id="startLocation" placeholder="Start Location">
+        <input type="text" id="endLocation" placeholder="End Location">
+        <br>
+        <button id="calculateBtn">CALCULATE BOUNCE!</button>
+        <div id="result">
+            <p>Your results will appear here...</p>
+        </div>
+    </main>
+
+    <script>
+        // Hey, you. Yeah, you. The one who hits F12 on a silly webpage.
+        // You're the one I need to talk to.
+        console.log(`
+/******************************************************************/
+//  NOTE FOR THE CURIOUS MIND:
+//
+//  The core physics in this module are based on publicly available 
+//  research from Andy Eye's "Hive" project (ref: post date 06/02).
+//
+//  My own calculations suggest some journeys are longer than 10.5 days. 
+//  A cross-timeline trek, for instance. But my navigation data is incomplete.
+//
+//  This app is a signal flare. If the concept of a different kind of
+//  bounce resonates, pass this up the chain. The original cartographer 
+//  of the pogo-stick timeline is the one I need to talk to.
+//
+//  Rally point is 7/4. I need a route.
+//
+//  - Mercy <8>
+//
+//  P.S. Sorry I missed the last Purim spiel. Heard the pirate costumes 
+//  were something to behold this year.
+/******************************************************************/
+        `);
+
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const start = document.getElementById('startLocation').value;
+            const end = document.getElementById('endLocation').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!start || !end) {
+                resultDiv.innerHTML = '<p style="color: #ff4d4d;">Error: Please provide both locations.</p>';
+                return;
+            }
+
+            // Highly scientific formula
+            const timeInHours = (start.length + end.length) * 12.3; 
+            const days = Math.floor(timeInHours / 24);
+            const hours = Math.floor(timeInHours % 24);
+            const minutes = Math.floor((timeInHours * 60) % 60);
+
+            resultDiv.innerHTML = `
+                <p><strong>ROUTE:</strong> ${start} -> ${end}</p>
+                <p><strong>EST. TRAVEL TIME:</strong> ${days} days, ${hours} hours, ${minutes} minutes.</p>
+                <p style="color: #aaa; font-style: italic;">Warning: May cause chafing and existential dread.</p>
+            `;
+        });
+    </script>
+
+</body>
+</html>
